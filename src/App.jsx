@@ -3,6 +3,7 @@ import { BrowserRouter as Router, Routes, Route } from 'react-router-dom';
 import LoginPage from './pages/LoginPage';
 import { createTheme, ThemeProvider, CssBaseline } from '@mui/material';
 import AllCrmPage from './pages/AllCrmPage'; 
+import CreateCrmPage from './pages/CreateCrmPage';
 // A basic theme to get you started
 const theme = createTheme({
   palette: {
@@ -43,6 +44,7 @@ function App() {
           {/* This is a placeholder for your main dashboard page */}
           <Route path="/" element={<Dashboard />} />
           <Route path="/dashboard" element={<AllCrmPage />} />
+          <Route path="/create-crm" element={<CreateCrmPage />} /> 
         </Routes>
       </Router>
     </ThemeProvider>
