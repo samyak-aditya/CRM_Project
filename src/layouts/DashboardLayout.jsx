@@ -1,19 +1,10 @@
 // src/layouts/DashboardLayout.jsx
 
 import React from 'react';
+import { Link as RouterLink, useLocation } from 'react-router-dom';
 import {
-  Box,
-  Drawer,
-  AppBar,
-  Toolbar,
-  List,
-  Typography,
-  Divider,
-  IconButton,
-  ListItem,
-  ListItemButton,
-  ListItemIcon,
-  ListItemText,
+  Box, Drawer, AppBar, Toolbar, List, Typography, Divider, IconButton,
+  ListItem, ListItemButton, ListItemIcon, ListItemText, Link
 } from '@mui/material';
 import AllInboxIcon from '@mui/icons-material/AllInbox';
 import AddIcon from '@mui/icons-material/Add';
@@ -23,11 +14,17 @@ import AccountCircleIcon from '@mui/icons-material/AccountCircle';
 
 const drawerWidth = 240;
 
-// This is your reusable layout
+const navItems = [
+  { text: 'All CRM', icon: <AllInboxIcon />, path: '/dashboard' },
+  { text: 'Create CRM', icon: <AddIcon />, path: '/create-crm' },
+];
+
 const DashboardLayout = ({ children }) => {
+  const location = useLocation(); // Hook to get the current URL
+
   return (
     <Box sx={{ display: 'flex' }}>
-      {/* Header */}
+      {/* AppBar (Header) remains the same */}
       <AppBar
         position="fixed"
         sx={{ width: `calc(100% - ${drawerWidth}px)`, ml: `${drawerWidth}px`, backgroundColor: '#fff', color: '#000' }}
@@ -35,16 +32,12 @@ const DashboardLayout = ({ children }) => {
       >
         <Toolbar>
           <Typography variant="h6" noWrap component="div" sx={{ flexGrow: 1 }} />
-          <IconButton>
-            <LightModeIcon />
-          </IconButton>
-          <IconButton>
-            <AccountCircleIcon />
-          </IconButton>
+          <IconButton><LightModeIcon /></IconButton>
+          <IconButton><AccountCircleIcon /></IconButton>
         </Toolbar>
       </AppBar>
 
-      {/* Sidebar */}
+      {/* Drawer (Sidebar) is now updated with functional links */}
       <Drawer
         sx={{
           width: drawerWidth,
@@ -59,19 +52,19 @@ const DashboardLayout = ({ children }) => {
         </Toolbar>
         <Divider />
         <List>
-          {/* This is where you can change the sidebar options */}
-          <ListItem disablePadding>
-            <ListItemButton selected>
-              <ListItemIcon><AllInboxIcon /></ListItemIcon>
-              <ListItemText primary="All CRM" />
-            </ListItemButton>
-          </ListItem>
-          <ListItem disablePadding>
-            <ListItemButton>
-              <ListItemIcon><AddIcon /></ListItemIcon>
-              <ListItemText primary="Create CRM" />
-            </ListItemButton>
-          </ListItem>
+          {navItems.map((item) => (
+            <ListItem key={item.text} disablePadding>
+              {/* Each button is now a link that changes the URL */}
+              <ListItemButton
+                component={RouterLink}
+                to={item.path}
+                selected={location.pathname === item.path} // Highlights the current page
+              >
+                <ListItemIcon>{item.icon}</ListItemIcon>
+                <ListItemText primary={item.text} />
+              </ListItemButton>
+            </ListItem>
+          ))}
         </List>
         <Box sx={{ flexGrow: 1 }} />
         <Divider />
@@ -86,12 +79,9 @@ const DashboardLayout = ({ children }) => {
       </Drawer>
 
       {/* Main Content Area */}
-      <Box
-        component="main"
-        sx={{ flexGrow: 1, bgcolor: 'background.default', p: 3 }}
-      >
-        <Toolbar /> {/* Spacer for AppBar */}
-        {children} {/* Your page-specific content will render here! */}
+      <Box component="main" sx={{ flexGrow: 1, bgcolor: '#f4f6f8', p: 3, minHeight: '100vh' }}>
+        <Toolbar /> {/* Spacer */}
+        {children}
       </Box>
     </Box>
   );
